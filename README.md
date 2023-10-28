@@ -16,6 +16,5 @@ This facilities non-root users binding the port, which we'll use on on the FreeB
 
 ## Compiling with cross
 
-To compile for multiple architectures, we'll use `cargo cross`. We'll do the compiling on
-a separate FreeBSD build node and deploy the appropriate binary to the FreeBSD compute nodes.
-
+To compile for multiple architectures, we'll use `cargo cross`. Of course it can
+be compiled normally as well.
