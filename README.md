@@ -12,9 +12,13 @@ compilation complexity and eliminates openssl dependencies from the build. All
 of the main TLS is with rustls.
 
 The other difference from morpho-web with morpho-web-lt is that we bind port 3443 instead of 443.
-This facilities non-root users binding the port, which we'll use on on the FreeBSD compute nodes.
+This facilities non-root users binding the port.
 
 ## Compiling with cross
 
 To compile for multiple architectures, we'll use `cargo cross`. Of course it can
 be compiled normally as well.
+
+## Project bobcat
+
+See https://github.com/jpegleg/project-bobcat regarding small scale, low power, BSD deployments.
