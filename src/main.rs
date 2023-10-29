@@ -5,26 +5,16 @@ use rustls_pemfile::{certs, pkcs8_private_keys};
 use actix_web::{middleware, App, HttpServer, get, Responder, HttpRequest};
 use actix_files::NamedFile;
 use actix_web_lab::{header::StrictTransportSecurity, middleware::RedirectHttps};
-use uuid::Uuid;
-use chrono::prelude::*;
 use std::env;
 
 #[get("/")]
 async fn index(req: HttpRequest) -> impl Responder {
-    let txid = Uuid::new_v4().to_string();
-    env::set_var("txid", &txid);
-    let peer = req.peer_addr();
-    let requ = req.headers(); 
-    log::info!("{} {:?} visiting website - {:?}", txid, peer, requ);
     NamedFile::open_async("./static/index.html").await
 }
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let readi: DateTime<Utc> = Utc::now();
-    env_logger::init_from_env(env_logger::Env::default().default_filter_or("info"));
-    let config = load_rustls_config();
-    log::info!("morpho initialized at {} >>> morpho HTTPS server on port 3443 using rustls TLSv1.3 and TLSv1.2", readi);
+    prinln!("morpho running on 3443 in minimal no logging mode")
     HttpServer::new(|| {
         App::new()
             .wrap(RedirectHttps::default())
@@ -32,7 +22,6 @@ async fn main() -> std::io::Result<()> {
             .wrap(middleware::DefaultHeaders::new().add(("x-content-type-options", "nosniff")))
             .wrap(middleware::DefaultHeaders::new().add(("x-frame-options", "SAMEORIGIN")))
             .wrap(middleware::DefaultHeaders::new().add(("x-xss-protection", "1; mode=block")))
-            .wrap(middleware::Logger::new("%{txid}e %a -> HTTP %s %r size: %b server-time: %T %{Referer}i %{User-Agent}i"))
             .service(index)
             .service(Files::new("/", "static"))
 
@@ -59,8 +48,7 @@ fn load_rustls_config() -> rustls::ServerConfig {
         .map(PrivateKey)
         .collect();
     if keys.is_empty() {
-        let readu: DateTime<Utc> = Utc::now();
-        eprintln!("{} - morpho FATAL - Open of privkey.pem paired with cert.pem failed, server must shutdown. Use PKCS8 PEM compatible with rustls.", readu);
+        eprintln!("morpho FATAL - Open of privkey.pem paired with cert.pem failed, server must shutdown. Use PKCS8 PEM compatible with rustls.");
         std::process::exit(1);
     }
     config.with_single_cert(cert_chain, keys.remove(0)).unwrap()
