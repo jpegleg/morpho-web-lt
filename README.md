@@ -3,6 +3,8 @@
 # morpho-web-lt
 
 A version of morpho-web without curl and with higher port binding for non-root users.
+This version of morpho also has no transactional logging.
+If logging is needed, either add your own or see the regular morpho logging.
 
 See the regular morpho-web here: https://github.com/jpegleg/morpho-web
 
