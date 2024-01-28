@@ -5,10 +5,9 @@ use rustls_pemfile::{certs, pkcs8_private_keys};
 use actix_web::{middleware, App, HttpServer, get, Responder, HttpRequest};
 use actix_files::NamedFile;
 use actix_web_lab::{header::StrictTransportSecurity, middleware::RedirectHttps};
-use std::env;
 
 #[get("/")]
-async fn index(req: HttpRequest) -> impl Responder {
+async fn index() -> impl Responder {
     NamedFile::open_async("./static/index.html").await
 }
 
