@@ -2,7 +2,7 @@ use std::{fs::File, io::BufReader};
 use actix_files::Files;
 use rustls::{Certificate, PrivateKey, ServerConfig};
 use rustls_pemfile::{certs, pkcs8_private_keys};
-use actix_web::{middleware, App, HttpServer, get, Responder, HttpRequest};
+use actix_web::{middleware, App, HttpServer, get, Responder};
 use actix_files::NamedFile;
 use actix_web_lab::{header::StrictTransportSecurity, middleware::RedirectHttps};
 
@@ -13,6 +13,7 @@ async fn index() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    let config = load_rustls_config();
     println!("morpho running on 3443 in minimal no logging mode");
     HttpServer::new(|| {
         App::new()
