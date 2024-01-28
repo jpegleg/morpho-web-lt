@@ -14,7 +14,7 @@ async fn index(req: HttpRequest) -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    prinln!("morpho running on 3443 in minimal no logging mode")
+    prinltn!("morpho running on 3443 in minimal no logging mode");
     HttpServer::new(|| {
         App::new()
             .wrap(RedirectHttps::default())
